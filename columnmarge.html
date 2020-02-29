@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron">
+            <table class="table">
+                <caption class="h2">Orginal Table</caption>
+                <thead>
+                    <tr>
+                        <th>SL</th>
+                        <th>Column 1</th>
+                        <th>Column 1</th>
+                        <th>Column 2</th>
+                        <th>Column 2</th>
+                        <th>Column 3</th>
+                        <th>Column 3</th>
+                        <th>Row Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>50</td>
+                        <td></td>
+                        <td></td>
+                        <td>60</td>
+                        <td></td>
+                        <td></td>
+                        <td>110</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>40</td>
+                        <td></td>
+                        <td></td>
+                        <td>40</td>
+                        <td></td>
+                        <td>20</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td></td>
+                        <td>60</td>
+                        <td></td>
+                        <td>20</td>
+                        <td>60</td>
+                        <td></td>
+                        <td>140</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>40</td>
+                        <td></td>
+                        <td>20</td>
+                        <td></td>
+                        <td></td>
+                        <td>100</td>
+                        <td>160</td>
+                    </tr>
+                </tbody>
+                
+                <tfoot>
+                    <tr>
+                        <th>Total: </td>
+                        <th>130</td>
+                        <th>60</td>
+                        <th>20</td>
+                        <th>120</td>
+                        <th>60</td>
+                        <th>120</td>
+                            <th>510</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="table" id="tbl1">
+                <caption class="h2">Marge Table</caption>
+                <thead>
+                    <tr>
+                        <th>SL</th>
+                        <th>Column 1</th>
+                        <th>Column 1</th>
+                        <th>Column 2</th>
+                        <th>Column 2</th>
+                        <th>Column 3</th>
+                        <th>Column 3</th>
+                        <th>Row Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>50</td>
+                        <td></td>
+                        <td></td>
+                        <td>60</td>
+                        <td></td>
+                        <td></td>
+                        <td>110</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>40</td>
+                        <td></td>
+                        <td></td>
+                        <td>40</td>
+                        <td></td>
+                        <td>20</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td></td>
+                        <td>60</td>
+                        <td>20</td>
+                        <td></td>
+                        <td>60</td>
+                        <td></td>
+                        <td>120</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>40</td>
+                        <td></td>
+                        <td></td>
+                        <td>20</td>
+                        <td></td>
+                        <td>100</td>
+                        <td>160</td>
+                    </tr>
+                </tbody>
+                
+                <tfoot>
+                    <tr>
+                        <th>Total: </td>
+                        <th>130</td>
+                        <th>60</td>
+                        <th>20</td>
+                        <th>120</td>
+                        <th>60</td>
+                        <th>120</td>
+                            <th>510</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+
+$(function(){
+    margecolumn("#tbl1");
+});
+function margecolumn(table_element) {
+            var i = 1;
+            var header_name = '';
+            var lengths = $(table_element+' thead tr:first-child th').length;
+            for (i = 0; i < lengths; i++) {
+                var e = $(table_element+' thead tr:first-child th')[i];
+                if ($(e).text() === "Row Toal") {
+                    break;
+                }
+                else {
+                    if (header_name === $(e).text()) {
+                        removecol(i, table_element);
+                    }
+                    else {
+                        header_name = $(e).text();
+                    }
+                    console.log($(e).text());
+                }
+            }
+        }
+        function removecol(c_colm,table_element) {
+            p_colm = c_colm - 1;
+            $(table_element + " thead tr").find("th:eq(" + c_colm + ")").remove();
+
+            $(table_element+" tbody tr").each(function() {
+                var c_text = $(this).find("td:eq("+c_colm+")").text();
+                var p_text = $(this).find("td:eq(" + p_colm + ")").text();
+                $(this).find("td:eq(" + p_colm + ")").text(c_text + p_text);
+                $(this).find("td:eq("+c_colm+")").remove();
+            });
+
+            $(table_element+" tfoot tr").each(function() {
+                var c_text = $(this).find("th:eq("+c_colm+")").text();
+                var p_text = $(this).find("th:eq(" + p_colm + ")").text();
+                var total = parseFloat(c_text) + parseFloat(p_text);
+
+                $(this).find("th:eq(" + p_colm + ")").text(total.toFixed(1));
+                $(this).find("th:eq("+c_colm+")").remove();
+            });
+            margecolumn(table_element);
+        }
+    </script>
+</body>
+</html>
